@@ -1,0 +1,45 @@
+create type house 6 1 name str origin str leader str military_strength int wealth int spice_production int
+create record house Atreides Caladan Duke 8000 5000 150
+search record house Atreides
+create type fremen 5 1 name str tribe str skill_level int allegiance str age int
+create record fremen Stilgar SietchTabr 9 Atreides 45
+delete record fremen Stilgar
+search record fremen Stilgar
+create type planet 2 1 name str size int
+create type planet 2 1 name str size int
+create record planet Dune 500
+create record planet Dune 500
+create type test 1 1 id int
+create record test 1
+create record test 2
+create record test 3
+create record test 4
+create record test 5
+create record test 6
+create record test 7
+create record test 8
+create record test 9
+create record test 10
+create record test 11
+create record test 12
+search record test 11
+invalid command
+create record no_table
+create type note 1 1 text str
+create record note \"\"
+search record note \"\"
+create type tag 1 1 label str
+create record tag AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+search record tag AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+create type tag 1 1 label str
+create record tag AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+create type item 1 1 id int
+create record item 10
+delete record item 10
+create record item 20
+search record item 20
+create type empty 1 1 a int
+delete record empty 1
+delete record empty 1
+create type nobody 1 1 name str
+search record nobody nobody

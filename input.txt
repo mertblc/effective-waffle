@@ -1,0 +1,11 @@
+create type house 6 1 name str origin str leader str military_strength int wealth int spice_production int
+create record house Atreides Caladan Duke 8000 5000 150
+create record house Harkonnen GiediPrime Baron 12000 3000 200
+create type fremen 5 1 name str tribe str skill_level int allegiance str age int
+create record fremen Stilgar SietchTabr 9 Atreides 45
+create record fremen Chani SietchTabr 8 Atreides 30
+delete record house Corrino
+search record fremen Stilgar
+search record house Atreides
+delete record fremen Chani
+search record fremen Chani 
