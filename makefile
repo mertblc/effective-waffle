@@ -1,9 +1,22 @@
+# Detect OS
+ifeq ($(OS),Windows_NT)
+    RM_FILE = del /f /q
+    RM_DIR = rmdir /s /q
+    PYTHON = python
+else
+    RM_FILE = rm -f
+    RM_DIR = rm -rf
+    PYTHON = python3
+endif
+
 clean:
-	del /f /q catalog.txt
-	rmdir /s /q pages
-	del /f /q output.txt log.csv
+	$(RM_FILE) catalog.txt
+	$(RM_DIR) pages
+	$(RM_FILE) output.txt log.csv
 
 test:
-	python archive.py updated_input.txt
+	$(PYTHON) archive.py updated_input.txt
 
 all: clean test
+
+.PHONY: clean test all

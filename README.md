@@ -10,6 +10,7 @@ A simple database system that stores and manages records for different types of 
 - Efficient page-based storage system
 - Search and delete operations
 - Command-line interface for operations
+- Cross-platform compatibility (Windows and macOS)
 
 ## Project Structure
 
@@ -22,20 +23,33 @@ A simple database system that stores and manages records for different types of 
 │   ├── record_utils.py     # Record serialization and validation
 │   └── field_types.py      # Field type definitions
 ├── updated_input.txt       # Sample input file for testing
-└── makefile               # Build and clean commands
+├── makefile               # Cross-platform build and clean commands
 ```
+
+## Prerequisites
+
+- Python 3.x
+- Git (for version control)
+- Make (for build commands)
+  - Windows: Install via [Chocolatey](https://chocolatey.org/) (`choco install make`)
+  - macOS: Install via [Homebrew](https://brew.sh/) (`brew install make`)
 
 ## Setup
 
-1. Ensure you have Python 3.x installed
-2. Clone this repository:
+1. Clone this repository:
    ```bash
    git clone <repository-url>
    cd ProjectDatabase
    ```
-3. Run the system:
+
+2. Run the system:
    ```bash
-   python archive.py <input-file>
+   # Using Python directly
+   python archive.py <input-file>  # Windows
+   python3 archive.py <input-file> # macOS
+
+   # Or using make
+   make test
    ```
 
 ## Usage
@@ -71,9 +85,20 @@ search record house Atreides
 
 ## Development
 
-- Use `make clean` to remove all database files and logs
-- Use `make test` to run the system with the sample input file
-- Use `make all` to clean and run tests
+The project includes a cross-platform makefile for common development tasks:
+
+```bash
+# Clean up database files and logs
+make clean
+
+# Run the system with sample input
+make test
+
+# Clean and run tests
+make all
+```
+
+These commands work on both Windows and macOS. The makefile automatically detects the operating system and uses the appropriate commands.
 
 ## Notes
 
@@ -82,3 +107,16 @@ search record house Atreides
 - String fields are limited to 32 bytes
 - Integer fields are 8-byte signed integers
 - Primary keys must be unique within each type
+- Database files (`catalog.txt`, `pages/`, `output.txt`, `log.csv`) are automatically ignored by Git
+- Python cache files (`__pycache__/`, `*.pyc`) are also ignored
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch for your feature
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+This project is open source and available under the MIT License.
