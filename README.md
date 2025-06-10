@@ -10,7 +10,6 @@ A simple database system that stores and manages records for different types of 
 - Efficient page-based storage system
 - Search and delete operations
 - Command-line interface for operations
-- Cross-platform compatibility (Windows and macOS)
 
 ## Project Structure
 
@@ -22,8 +21,7 @@ A simple database system that stores and manages records for different types of 
 │   ├── page_utils.py       # Page-level storage operations
 │   ├── record_utils.py     # Record serialization and validation
 │   └── field_types.py      # Field type definitions
-├── updated_input.txt       # Sample input file for testing
-├── makefile               # Cross-platform build and clean commands
+
 ```
 
 ## Prerequisites
@@ -47,10 +45,6 @@ A simple database system that stores and manages records for different types of 
    # Using Python directly
    python archive.py <input-file>  # Windows
    python3 archive.py <input-file> # macOS
-
-   # Or using make
-   make test
-   ```
 
 ## Usage
 
@@ -82,41 +76,3 @@ create record house Atreides Caladan Duke 8000 5000 150
 # Search for a record
 search record house Atreides
 ```
-
-## Development
-
-The project includes a cross-platform makefile for common development tasks:
-
-```bash
-# Clean up database files and logs
-make clean
-
-# Run the system with sample input
-make test
-
-# Clean and run tests
-make all
-```
-
-These commands work on both Windows and macOS. The makefile automatically detects the operating system and uses the appropriate commands.
-
-## Notes
-
-- The system uses a page-based storage mechanism
-- Each page can store up to 10 records
-- String fields are limited to 32 bytes
-- Integer fields are 8-byte signed integers
-- Primary keys must be unique within each type
-- Database files (`catalog.txt`, `pages/`, `output.txt`, `log.csv`) are automatically ignored by Git
-- Python cache files (`__pycache__/`, `*.pyc`) are also ignored
-
-## Contributing
-
-1. Fork the repository
-2. Create a new branch for your feature
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-This project is open source and available under the MIT License.
