@@ -256,9 +256,15 @@ def validate_record_values(fields: List[Field], values: List[Any], pk_index: int
             elif field.type == FieldType.STR:
                 # Validate string
                 str_val = str(value)
+                
                 if len(str_val.encode('utf-8')) > field.max_length:
                     raise FieldConstraintError(
                         f"String value too long for field '{field.name}' (max {field.max_length} bytes)"
+                    )
+
+                if not str_val.isalnum():
+                    raise FieldConstraintError(
+                        f"String value '{str_val}' in field '{field.name}' must be alphanumeric"
                     )
             else:
                 raise FieldTypeError(f"Unsupported field type: {field.type}")
