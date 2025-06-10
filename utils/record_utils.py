@@ -1,30 +1,3 @@
-# File: utils/record_utils.py
-#
-# This module handles record serialization/deserialization for the Dune Archive System. It must:
-#
-# 1. Define functions to serialize a Python record (list of field values) into bytes:
-#    - Pad or truncate string fields to fixed lengths.
-#    - Pack integer fields using struct.pack.
-#    - Prepend a validity flag (1 byte).
-#
-# 2. Define functions to deserialize a record byte sequence back into Python values:
-#    - Read and interpret the validity flag.
-#    - Unpack fixed-length strings (strip padding) and integers.
-#
-# 3. Provide a function to compare a record's primary key value with a search key.
-#
-# 4. Calculate the byte offset for a given slot index in a page.
-#
-# 5. Ensure consistency with page_utils' PAGE_SIZE, MAX_SLOTS, and header format.
-#
-# Requirements:
-# - Use Python's struct module for packing/unpacking.
-# - Clear exceptions on format mismatches.
-# - Type hints and docstrings for each function.
-#
-# Deliverable:
-# Return a complete Python module implementing these operations with inline comments.
-
 import struct
 from typing import List, Tuple, Any, Optional
 from dataclasses import dataclass

@@ -323,10 +323,10 @@ def process_operation_line(line: str, line_num: int) -> OperationResult:
         log_operation(line.strip(), result)
         
         # Write operation status to output.txt only for non-search operations
-        if op != Operation.SEARCH_RECORD:
-            with open("output.txt", "a") as out:
-                status = "Success" if result.success else "Failed"
-                out.write(f"Line {line_num}: {status} - {result.message}\n")
+        # if op != Operation.SEARCH_RECORD:
+        #     with open("output.txt", "a") as out:
+        #         status = "Success" if result.success else "Failed"
+        #         out.write(f"Line {line_num}: {status} - {result.message}\n")
         
         return result
     
@@ -383,8 +383,9 @@ def main():
         f.write("=== Starting Dune Archive System ===\n")
     with open("output.txt", "w") as f:
         pass  # Clear output file
-    with open("log.csv", "w") as f:
-        f.write("timestamp,operation,status\n")  # Initialize log file with header
+    if not os.path.exists("log.csv"):
+        with open("log.csv", "w") as f:
+            f.write("timestamp,operation,status\n")
     
     parser = argparse.ArgumentParser(description="Dune Archive System")
     parser.add_argument("input_file", help="Path to input file")
@@ -428,8 +429,8 @@ def main():
         sys.exit(1)
     
     # Write completion message to output.txt
-    with open("output.txt", "a") as f:
-        f.write("\nProcessing complete. Check debug.log for details.\n")
+    # with open("output.txt", "a") as f:
+    #     f.write("\nProcessing complete. Check debug.log for details.\n")
 
 if __name__ == "__main__":
     main()
