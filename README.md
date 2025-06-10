@@ -39,8 +39,13 @@ A simple database system that stores and manages records for different types of 
    git clone <repository-url>
    cd ProjectDatabase
    ```
+2.	Create a Python 3.11 virtual environment:
+   ```
+   python3.11 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-2. Run the system:
+3. Run the system:
    ```bash
    # Using Python directly
    python archive.py <input-file>  # Windows
