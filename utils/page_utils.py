@@ -8,6 +8,7 @@ MAX_SLOTS = 10     # Maximum number of records per page (per spec)
 SLOT_SIZE = 128    # Maximum size of a record in bytes
 HEADER_SIZE = 10   # 4 bytes page_num + 4 bytes record_count + 2 bytes bitmap
 PAGE_SIZE = HEADER_SIZE + (MAX_SLOTS * SLOT_SIZE)  # Total page size
+MAX_PAGES_PER_FILE = 100 
 
 @dataclass
 class PageHeader:
@@ -170,6 +171,9 @@ def allocate_page(type_name: str) -> int:
     
     # Calculate new page number
     new_page_num = 0 if not exists else os.path.getsize(file_path) // PAGE_SIZE
+    
+    if new_page_num >= MAX_PAGES_PER_FILE:
+        raise PageError(f"Maximum page limit ({MAX_PAGES_PER_FILE}) exceeded for type '{type_name}'")
     
     # Create new page with empty header and data
     header = PageHeader(new_page_num, 0, 0)
