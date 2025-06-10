@@ -90,8 +90,8 @@ def _parse_type_definition(line: str) -> TypeDefinition:
         for field_part in field_parts:
             name, type_str = field_part.split(":")
             field_type = _parse_field_type(type_str)
-            # Set max_length: 8 bytes for INT, 32 bytes for STR
-            max_length = 8 if field_type == FieldType.INT else 32
+            # Set max_length: 8 bytes for INT, 16 bytes for STR
+            max_length = 8 if field_type == FieldType.INT else 16
             fields.append(Field(name.strip(), field_type, max_length))
         
         return TypeDefinition(type_name, num_fields, pk_index_0based, fields)  # Store 0-based
@@ -106,9 +106,9 @@ def initialize_catalog() -> None:
             pass  # Create empty file
 
 MAX_FIELDS_PER_TYPE = 10
-MAX_TYPE_NAME_LENGTH = 64
-MAX_FIELD_NAME_LENGTH = 64
-DEFAULT_STRING_LENGTH = 32  # For STR fields
+MAX_TYPE_NAME_LENGTH = 32
+MAX_FIELD_NAME_LENGTH = 32
+DEFAULT_STRING_LENGTH = 16  # For STR fields
 INT_LENGTH = 8              # Fixed for INT fields
 VALIDITY_FLAG_SIZE = 1 
 SLOT_SIZE = 128
