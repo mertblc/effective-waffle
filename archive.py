@@ -164,8 +164,8 @@ def handle_search_record(args: List[str]) -> OperationResult:
     Format: search record <type> <key_value>
     """
     try:
-        if len(args) < 3:
-            raise ValueError("Insufficient arguments")
+        if len(args) != 3:
+            raise ValueError("Invalid number of arguments. Format: delete record <type> <primary_key>")
         
         type_name = args[1]
         key_value = args[2]
@@ -228,8 +228,8 @@ def handle_delete_record(args: List[str]) -> OperationResult:
     Format: delete record <type> <key_value>
     """
     try:
-        if len(args) < 3:
-            raise ValueError("Insufficient arguments")
+        if len(args) != 3:
+            raise ValueError("Invalid number of arguments. Format: delete record <type> <primary_key>")
         
         type_name = args[1]
         key_value = args[2]
