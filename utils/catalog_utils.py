@@ -90,8 +90,8 @@ def _parse_type_definition(line: str) -> TypeDefinition:
         for field_part in field_parts:
             name, type_str = field_part.split(":")
             field_type = _parse_field_type(type_str)
-            # Set max_length: 8 bytes for INT, 32 bytes for STR
-            max_length = 8 if field_type == FieldType.INT else 32
+            # Set max_length: 8 bytes for INT, 16 bytes for STR
+            max_length = 8 if field_type == FieldType.INT else 16
             fields.append(Field(name.strip(), field_type, max_length))
         
         return TypeDefinition(type_name, num_fields, pk_index_0based, fields)  # Store 0-based
@@ -104,6 +104,14 @@ def initialize_catalog() -> None:
     if not os.path.exists("catalog.txt"):
         with open("catalog.txt", "w") as f:
             pass  # Create empty file
+
+MAX_FIELDS_PER_TYPE = 10
+MAX_TYPE_NAME_LENGTH = 32
+MAX_FIELD_NAME_LENGTH = 32
+DEFAULT_STRING_LENGTH = 16  # For STR fields
+INT_LENGTH = 8              # Fixed for INT fields
+VALIDITY_FLAG_SIZE = 1 
+SLOT_SIZE = 128
 
 def create_type(type_name: str, num_fields: int, pk_index: int, fields: List[Tuple[str, str]]) -> None:
     """
@@ -121,10 +129,16 @@ def create_type(type_name: str, num_fields: int, pk_index: int, fields: List[Tup
     """
     if type_name in _catalog:
         raise DuplicateTypeError(f"Type '{type_name}' already exists")
-    
+
+    if len(type_name) > MAX_TYPE_NAME_LENGTH:
+        raise InvalidTypeDefinitionError(f"Type name too long (max {MAX_TYPE_NAME_LENGTH})")
+
     if len(fields) != num_fields:
         raise InvalidTypeDefinitionError("Field count mismatch")
-    
+
+    if num_fields > MAX_FIELDS_PER_TYPE:
+        raise InvalidTypeDefinitionError(f"Cannot have more than {MAX_FIELDS_PER_TYPE} fields")
+
     # Convert 1-based pk_index to 0-based
     pk_index_0based = pk_index - 1
     if pk_index < 1 or pk_index > num_fields:
@@ -132,25 +146,29 @@ def create_type(type_name: str, num_fields: int, pk_index: int, fields: List[Tup
     
     # Create fields with appropriate max_length
     field_objects = []
+    total_record_size = VALIDITY_FLAG_SIZE
     for name, type_str in fields:
+        if len(name) > MAX_FIELD_NAME_LENGTH:
+            raise InvalidTypeDefinitionError(
+                f"Field name '{name}' too long (max {MAX_FIELD_NAME_LENGTH})")
+
         field_type = _parse_field_type(type_str)
-        # Set max_length: 8 bytes for INT, 32 bytes for STR (configurable)
-        max_length = 8 if field_type == FieldType.INT else 32
+        max_length = INT_LENGTH if field_type == FieldType.INT else DEFAULT_STRING_LENGTH
+        total_record_size += max_length
         field_objects.append(Field(name, field_type, max_length))
-    
-    # Create type definition with 0-based pk_index
+    if total_record_size > SLOT_SIZE:
+        raise InvalidTypeDefinitionError(
+            f"Record size {total_record_size} exceeds maximum slot size {SLOT_SIZE} bytes")
     type_def = TypeDefinition(
         name=type_name,
         num_fields=num_fields,
         pk_index=pk_index_0based,  # Store as 0-based
         fields=field_objects
     )
-    
-    # Write to catalog file (store as 1-based for user interface)
     with open("catalog.txt", "a") as f:
         fields_str = ",".join(f"{f.name}:{f.type.name.lower()}" for f in type_def.fields)
-        f.write(f"{type_name}|{num_fields}|{pk_index}|{fields_str}\n")  # Write 1-based pk_index
-    
+        f.write(f"{type_name}|{num_fields}|{pk_index}|{fields_str}\n")
+
     # Update in-memory catalog
     _catalog[type_name] = type_def
 

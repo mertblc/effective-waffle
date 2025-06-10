@@ -1,24 +1,3 @@
-# File: utils/page_utils.py
-#
-# This module manages page-level operations for the Dune Archive System. It must:
-#
-# 1. Define constants for PAGE_SIZE, MAX_SLOTS, and header format.
-# 2. Read a page from "<type-name>.bin" at a given page number into a byte buffer.
-# 3. Parse and update the page header (page number, record count, bitmap).
-# 4. Locate the first free slot based on the bitmap.
-# 5. Write a record byte sequence into a specific slot and update header.
-# 6. Serialize the modified page back to the binary file.
-# 7. Handle pagination: allocate new page if all existing pages are full.
-# 8. Provide functions to iterate pages for search/delete operations.
-#
-# Requirements:
-# - Use Python's `struct` module for byte packing/unpacking.
-# - Do not load entire file; read/write fixed-size PAGE_SIZE blocks.
-# - Raise exceptions on I/O errors or invalid page numbers.
-#
-# Deliverable:
-# Return a complete Python module with well-documented functions, type hints, and inline comments.
-
 import os
 import struct
 from typing import List, Tuple, Optional, BinaryIO
@@ -29,6 +8,7 @@ MAX_SLOTS = 10     # Maximum number of records per page (per spec)
 SLOT_SIZE = 128    # Maximum size of a record in bytes
 HEADER_SIZE = 10   # 4 bytes page_num + 4 bytes record_count + 2 bytes bitmap
 PAGE_SIZE = HEADER_SIZE + (MAX_SLOTS * SLOT_SIZE)  # Total page size
+MAX_PAGES_PER_FILE = 100 
 
 @dataclass
 class PageHeader:
@@ -191,6 +171,9 @@ def allocate_page(type_name: str) -> int:
     
     # Calculate new page number
     new_page_num = 0 if not exists else os.path.getsize(file_path) // PAGE_SIZE
+    
+    if new_page_num >= MAX_PAGES_PER_FILE:
+        raise PageError(f"Maximum page limit ({MAX_PAGES_PER_FILE}) exceeded for type '{type_name}'")
     
     # Create new page with empty header and data
     header = PageHeader(new_page_num, 0, 0)

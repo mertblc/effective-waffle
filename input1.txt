@@ -1,0 +1,11 @@
+create type simal 2 1 name str lecture_grade str
+create record simal MATH202 AA
+create record simal MATH201
+create record simal GiediPrime Baron 12000 3000 200
+create type fremen 5 1 name str tribe str skill_level int allegiance str age int
+create record fremen Simsim SimTribe 6 Alone 22
+create record fremen Chani SietchTabr 8 Atreides 30
+delete record simal MATH201
+delete record simal MATH202
+search record fremen Simsim
+delete record fremen Simsim
